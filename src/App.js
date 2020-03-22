@@ -4,6 +4,7 @@ import Home from './components/home';
 import HostGame from './components/host-game';
 import JoinGame from './components/join-game';
 import Peer from 'peerjs';
+import Test from "./components/test"
 
 import PeerContext from './peerContext';
 
@@ -22,6 +23,7 @@ export default () => {
                 <Route exact path="/" component={Home} />
                 <Route path="/host-game" component={HostGame} />
                 <Route path="/join-game" component={JoinGame} />
+                <Route path="/test" component={Test} />
             </PeerContext.Provider>
 
         </Router>

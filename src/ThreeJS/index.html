@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>balls</title>
+
+</head>
+
+<body>
+    <script type="module">
+        import * as THREE from './build/three.module.js';
+        import { GLTFLoader } from './gltfLoader.js';
+        import { OrbitControls } from './orbitControls.js';
+
+        var container, controls;
+        var camera, scene, renderer;
+
+        init();
+        render();
+
+
+        function init() {
+            container = document.createElement('div');
+            document.body.appendChild(container);
+
+            
+
+            scene = new THREE.Scene();
+
+            camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.25, 20);
+            camera.position.set(- 2, 1, 0.4);
+            // camera.lookAt(0,5,0);
+            
+            scene.background = new THREE.Color().setHSL( 0.6, 0, 1 );
+            scene.fog = new THREE.Fog( scene.background, 1, 5000 );
+
+            var loader = new GLTFLoader()
+
+            loader.load("table2.gltf", (gltf) => {
+                scene.add(gltf.scene)
+                var light = new THREE.HemisphereLight( 0xffffbb, 0x080820, 1 );
+                scene.add( light );
+                var light2 = new THREE.DirectionalLight(0xffffff, 1)
+                scene.add(light2)
+
+            })
+
+            var geometry = new THREE.BoxGeometry(1, 1, 1)
+        var material = new THREE.MeshLambertMaterial({color: 0xffcc00})
+        var mesh = new THREE.Mesh(geometry, material)
+        mesh.scale.y = 0.1
+        mesh.scale.x = 0.08
+        mesh.scale.z = 0.01
+
+        mesh.position.x = 0.6
+        mesh.position.y = 0.8
+        mesh.position.z = 1.3
+        scene.add(mesh)
+
+
+        var geometry2 = new THREE.BoxGeometry(1, 1, 1)
+        var material2 = new THREE.MeshLambertMaterial({color: 0xffcc00})
+        var mesh2 = new THREE.Mesh(geometry, material)
+        mesh2.scale.y = 0.1
+        mesh2.scale.x = 0.08
+        mesh2.scale.z = 0.01
+
+        mesh2.position.x = 0.5 //left and right
+        mesh2.position.y = 0.8 //up and down
+        mesh2.position.z = 1.3 //back and forward
+        scene.add(mesh2)
+
+        var geometry3 = new THREE.BoxGeometry(1, 1, 1)
+        var material3 = new THREE.MeshLambertMaterial({color: 0xffcc00})
+        var mesh3 = new THREE.Mesh(geometry, material)
+        mesh3.scale.y = 0.1
+        mesh3.scale.x = 0.08
+        mesh3.scale.z = 0.01
+
+        mesh3.position.x = 0.4 //left and right
+        mesh3.position.y = 0.8 //up and down
+        mesh3.position.z = 1.3 //back and forward
+        scene.add(mesh3)
+
+        var geometry4 = new THREE.BoxGeometry(1, 1, 1)
+        var material4 = new THREE.MeshLambertMaterial({color: 0xffcc00})
+        var mesh4 = new THREE.Mesh(geometry, material)
+        mesh4.scale.y = 0.1
+        mesh4.scale.x = 0.08
+        mesh4.scale.z = 0.01
+
+        mesh4.position.x = 0.3 //left and right
+        mesh4.position.y = 0.8 //up and down
+        mesh4.position.z = 1.3 //back and forward
+        scene.add(mesh4)
+
+
+        var geometry5 = new THREE.BoxGeometry(1, 1, 1)
+        var material5 = new THREE.MeshLambertMaterial({color: 0xffcc00})
+        var mesh5 = new THREE.Mesh(geometry, material)
+        mesh5.scale.y = 0.1 //longer and shorter
+        mesh5.scale.x = 0.08 //wider and skinnier
+        mesh5.scale.z = 0.03 //thicker and thinner
+
+        mesh5.position.x = -0.1 //left and right
+        mesh5.position.y = 0.63 //up and down
+        mesh5.position.z = 1.1 //back and forward
+
+        mesh5.rotation.x = 1.6
+        scene.add(mesh5)
+        
+        
+
+
+
+            renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setPixelRatio(window.devicePixelRatio);
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.toneMapping = THREE.ACESFilmicToneMapping;
+            renderer.toneMappingExposure = 0.8;
+            renderer.outputEncoding = THREE.sRGBEncoding;
+            container.appendChild(renderer.domElement);
+
+            var pmremGenerator = new THREE.PMREMGenerator(renderer);
+            pmremGenerator.compileEquirectangularShader();
+
+            controls = new OrbitControls(camera, renderer.domElement);
+            controls.addEventListener('change', render); // use if there is no animation loop
+            controls.minDistance = 2;
+            controls.maxDistance = 10
+            controls.target.set(0.8, 1, - 0.1);
+            controls.update();
+
+            window.addEventListener('resize', onWindowResize, false);
+        }
+
+        function onWindowResize() {
+
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+
+            renderer.setSize(window.innerWidth, window.innerHeight);
+
+            render();
+
+        }
+
+        function onMouseMove(event) {
+            event.preventDefault()
+
+            mouse.x = ( event.clientX / window.innerWidth )  * 2 - 1
+            mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1
+
+            raycaster.setFromCamera(mouse, camera)
+
+            var intersects = raycaster.intersectObjects(scene.children, true)
+            for (var i = 0; i < intersects.length; i++) {
+                this.tl = new TimelineMax()
+                this.tl.to(intersects[i].object.position, .5, {x: 2, ease: Expo.easeOut})
+                this.tl.to(intersects[i].object.rotation, .5, {y: Math.PI*.5, ease: Expo.easeOut}, "=-1.5")
+            }
+        }
+
+
+        function render() {
+
+            renderer.render(scene, camera);
+
+        }
+    </script>
+</body>
+
+</html>
