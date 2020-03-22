@@ -65,6 +65,7 @@
 
 
         // MODELS AND OBJECTS----------------------------------------------------------------------------
+        
         loader.load("table2.gltf", (gltf) => {
             scene.add(gltf.scene)
         })
@@ -117,10 +118,6 @@
         mesh4.scale.y = 0.1
         mesh4.scale.x = 0.08
         mesh4.scale.z = 0.01
-        mesh4.edgeGlow = 50
-        mesh4.edgeStrength = 50
-        mesh4.pulsePeriod = 20
-        mesh4.edgeThickness = 40
 
         mesh4.position.x = 0.63 //left and right
         mesh4.position.y = 0.9 //up and down
@@ -218,21 +215,27 @@
 
         // postprocessing
 
+        var composer, outlinePass;
+
         composer = new EffectComposer(renderer);
 
         var renderPass = new RenderPass(scene, camera);
         composer.addPass(renderPass);
 
         outlinePass = new OutlinePass(new THREE.Vector2(window.innerWidth, window.innerHeight), scene, camera);
+        outlinePass.edgeGlow = 4
+        outlinePass.edgeStrength = 4
+        outlinePass.pulsePeriod = 4
+        outlinePass.edgeThickness = 4
         composer.addPass(outlinePass);
 
-        var onLoad = function (texture) {
+        // var onLoad = function (texture) {
 
-            outlinePass.patternTexture = texture;
-            texture.wrapS = THREE.RepeatWrapping;
-            texture.wrapT = THREE.RepeatWrapping;
+        //     outlinePass.patternTexture = texture;
+        //     texture.wrapS = THREE.RepeatWrapping;
+        //     texture.wrapT = THREE.RepeatWrapping;
 
-        };
+        // };
 
         // var loader = new THREE.TextureLoader();
 
@@ -269,7 +272,7 @@
             //     // controls.target.set(0.8, 1, - 0.1);
             //     controls.update();
 
-            render()
+            animate()
 
             document.body.addEventListener("click", onMouseMove)
     </script>
