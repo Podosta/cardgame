@@ -1,15 +1,28 @@
 import React, { useContext, useEffect, useState } from 'react';
-import Peer from 'peerjs';
+
+import { START_GAME, RECIEVED_START_GAME } from '../constants/game-states';
 
 import PeerContext from '../peerContext';
+import Peer from 'peerjs';
 
 export default () => {
-    const { hostID } = useContext(PeerContext)
+    const { setIsHost, setPeerID, currentID } = useContext(PeerContext);
 
+    useEffect(() => {
+        setIsHost(true);
+
+        const peer = new Peer(currentID);
+
+        peer.on('connection', (connection) => { 
+            console.log('connection!!!', connection)        
+            setPeerID(connection.peer);      
+        });    
+    }, []);
+    
     return (
         <div>
             Hi! Your Host ID is:
-            <input readOnly value={hostID} />
+            <input readOnly value={currentID} />
         </div>
     )
 }

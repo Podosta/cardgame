@@ -1,29 +1,35 @@
-import React, { useState } from 'react';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
 import Home from './components/home';
 import HostGame from './components/host-game';
 import JoinGame from './components/join-game';
-import Peer from 'peerjs';
-import Test from "./components/test"
+import Game from './components/game';
 
 import PeerContext from './peerContext';
 
-export default () => {
-    const [peer] = useState(new Peer());
-    const [hostID, setHostID] = useState(undefined)
+import { v4 } from 'uuid';
 
-    peer.on('open', (id) => {
-        console.log('connection opened with id of', id);
-        setHostID(id);
-    });
+export default () => {
+    const [peerID, setPeerID] = useState('');
+    const [currentID] = useState(v4());
+
+    const [isHost, setIsHost] = useState(false);
 
     return (
         <Router>
-            <PeerContext.Provider value={{ peer, hostID }}>
-                <Route exact path="/" component={Home} />
-                <Route path="/host-game" component={HostGame} />
-                <Route path="/join-game" component={JoinGame} />
-                <Route path="/test" component={Test} />
+            <PeerContext.Provider value={{ setPeerID, peerID, currentID, setIsHost, isHost }}>
+                {
+                    (peerID) ? (
+                        <Game />
+                    ) : (
+                            <>
+                                <Route exact path="/" component={Home} />
+                                <Route path="/host-game" component={HostGame} />
+                                <Route path="/join-game" component={JoinGame} />
+                            </>
+                        )
+                }
+
             </PeerContext.Provider>
 
         </Router>
