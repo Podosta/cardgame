@@ -6,6 +6,9 @@ import JoinGame from './components/join-game';
 import Game from './components/game';
 
 import PeerContext from './peerContext';
+import Peer from 'peerjs';
+
+import { v4 } from 'uuid';
 
 import { v4 } from 'uuid';
 
