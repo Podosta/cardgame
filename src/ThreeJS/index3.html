@@ -47,7 +47,7 @@
         const gui = new GUI({ width: 300 });
         gui.add({ is3d: false }, 'is3d').onChange((is3d) => {
             if (Boolean(is3d) === true) {
-                camera.position.set(0.5, 1.1, 1);
+                camera.position.set(0.5, 1.1, 1.32);
                 camera.rotation.set(-.9, 0, 0);
                 return;
             }
@@ -345,8 +345,6 @@
                 scene.remove(intersects[0].object);1
                 selectedCards.forEach(x => scene.remove(x));
                 selectedCards = [];
-
-                console.log(tableCards)
 
                 const tcCopy = [...tableCards];
                 tableCards = [];
