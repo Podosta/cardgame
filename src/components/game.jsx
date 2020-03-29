@@ -13,6 +13,7 @@ export default () => {
             <div>
                 <label>IsHost</label> {isHost ? 'TRUE' : 'FALSE'}
             </div>
+            <iframe src={process.env.PUBLIC_URL + '/game/index3.html'} width={500} height={500}/>
         </>
     )
 }

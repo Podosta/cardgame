@@ -10,8 +10,6 @@ import Peer from 'peerjs';
 
 import { v4 } from 'uuid';
 
-import { v4 } from 'uuid';
-
 export default () => {
     const [peerID, setPeerID] = useState('');
     const [currentID] = useState(v4());
